@@ -44,12 +44,12 @@ namespace ZelentsovLanguage
             }
         }
 
-        public DateTime? LastArrival
+        public string LastArrival
         {
             get
             {
                 if (ClientService.Count != 0)
-                    return ClientService.ToList().OrderBy(p => p.StartTime).First().StartTime;
+                    return ClientService.ToList().OrderByDescending(p => p.StartTime).First().StartTime.ToShortDateString();
                 else
                     return null;
             }

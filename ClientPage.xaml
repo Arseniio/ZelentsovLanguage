@@ -16,16 +16,14 @@
             <RowDefinition Height="10*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <TextBlock Name="TB_selectedRec"/>
-            <TextBlock Text="из" VerticalAlignment="Center"/>
-            <TextBlock Name="TB_allRec"/>
-        </StackPanel>
+
         <ListView Grid.Row="1" Name="LV_Clients" d:ItemsSource="{d:SampleData ItemCount=5}" >
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
                         <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
                             <RowDefinition/>
                             <RowDefinition/>
                             <RowDefinition/>
@@ -57,33 +55,39 @@
                             <TextBlock Text=")"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
+                            <TextBlock Text="Дата регистрации: "/>
                             <TextBlock Text="{Binding RegistrationDate}" />
-                            <TextBlock Text=" / "/>
-                            <TextBlock Text="{Binding LastArrival}"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal">
+                            <TextBlock Text="Дата последнего посещения: "/>
+                        <TextBlock Text="{Binding LastArrival}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal">
                             <TextBlock Text="Количество посещений: "/>
                             <TextBlock Text="{Binding ArrivalCount}"/>
                         </StackPanel>
-                        <StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal">
+                        <StackPanel Grid.Column="1" Grid.Row="4" Orientation="Horizontal">
                             <TextBlock Text="{Binding GenderName}"/>
                             <TextBlock Text=" / "/>
                             <TextBlock Text="{Binding Birthday}"/>
                         </StackPanel>
-                        <StackPanel Grid.Column="1" Grid.Row="4" Orientation="Horizontal">
+                        <StackPanel Grid.Column="1" Grid.Row="5" Orientation="Horizontal">
                             <TextBlock Text="{Binding Phone}"/>
                             <TextBlock Text=" / "/>
                             <TextBlock Text="{Binding Email}"/>
                         </StackPanel>
-                        <StackPanel Grid.Column="1" Grid.Row="5" Height="20">
+                        <StackPanel Grid.Column="1" Grid.Row="6" Height="20">
                             <TextBlock Text="ТЭГИ????????"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="7" >
+                            <Button Name="Btn_RemoveClient" HorizontalAlignment="Left" Content="Удалить клинета" FontSize="13" Click="Btn_RemoveClient_Click" Width="120" Height="25"/>
                         </StackPanel>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
         <StackPanel Grid.Row="3" Orientation="Horizontal">
-            <ComboBox Name="CB_PageLen" Width="80" Margin="5">
+            <ComboBox Name="CB_PageLen" Width="80" Margin="5" SelectionChanged="CB_PageLen_SelectionChanged">
                 <ComboBoxItem IsSelected="True">Все</ComboBoxItem>
                 <ComboBoxItem>10</ComboBoxItem>
                 <ComboBoxItem>50</ComboBoxItem>
@@ -92,8 +96,20 @@
 
         </StackPanel>
         <StackPanel  Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" >
+            <StackPanel Margin="0 0 30 0" Grid.Row="0" Orientation="Horizontal">
+                <TextBlock Name="TB_selectedRec" VerticalAlignment="Center"/>
+                <TextBlock Text="из" VerticalAlignment="Center" />
+                <TextBlock Name="TB_allRec" VerticalAlignment="Center"/>
+            </StackPanel>
             <Button Name="Btn_left_page" Click="Btn_left_page_Click" Width="30" Height="30" Content="&lt;"/>
-            <Button Name="Btn_right_page" Click="Btn_right_page_Click" Width="30" Height="30" Content=">" Margin="10 0 10 0"/>
+            <ListBox Name="LB_pages">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+                <Button Name="Btn_right_page" Click="Btn_right_page_Click" Width="30" Height="30" Content=">" Margin="10 0 10 0"/>
         </StackPanel>
     </Grid>
 </Page>

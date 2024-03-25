@@ -26,7 +26,7 @@ namespace ZelentsovLanguage
             LV_Clients.ItemsSource = ZelentsovLanguageEntities.GetContext().Client.ToList();
             UpdateClients();
         }
-        int page = 1;
+        int page = 0;
         int pageLength = -1;
         public void UpdateClients()
         {
@@ -47,11 +47,28 @@ namespace ZelentsovLanguage
                     pageLength = 200;
                     break;
             }
+            LB_pages.Items.Clear();
+            decimal MaxPages = decimal.Round((decimal)allClients.Count / pageLength);
+            for (int i = 0; i < MaxPages; i++)
+            {
+                LB_pages.Items.Add(i + 1);
+            }
+            LB_pages.SelectedIndex = page;
             TB_allRec.Text = ZelentsovLanguageEntities.GetContext().Client.ToList().Count.ToString();
             TB_selectedRec.Text = allClients.Count.ToString();
-            if (pageLength != -1 && (page * pageLength) < allClients.Count)
+            if (pageLength != -1)
+            {
+                var cutLength = 0;
+                if(((page+1) * pageLength) > allClients.Count)
+                {
+                    cutLength = allClients.Count - (page * pageLength);
+                    LV_Clients.ItemsSource = allClients.GetRange(page * pageLength, cutLength);
+
+                }
+                else
                 LV_Clients.ItemsSource = allClients.GetRange(page * pageLength, pageLength);
-            else if(pageLength==-1)
+            }
+            else if (pageLength == -1)
                 LV_Clients.ItemsSource = allClients;
 
         }
@@ -69,6 +86,32 @@ namespace ZelentsovLanguage
         {
             if (page != 0)
                 page--;
+            UpdateClients();
+        }
+
+        private void Btn_RemoveClient_Click(object sender, RoutedEventArgs e)
+        {
+            var client = (sender as Button).DataContext as Client;
+            if(client.ClientService.Count > 0)
+            {
+                MessageBox.Show("Невозможно удалить клинета у которого были посещения");
+                return;
+            }
+            try
+            {
+                ZelentsovLanguageEntities.GetContext().Client.Remove(client);
+                ZelentsovLanguageEntities.GetContext().SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка сохранения изменений");
+            }
+            UpdateClients();
+        }
+
+        private void CB_PageLen_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(this.IsLoaded)
             UpdateClients();
         }
     }
