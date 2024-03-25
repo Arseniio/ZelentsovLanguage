@@ -16,6 +16,11 @@
             <RowDefinition Height="10*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <TextBlock Name="TB_selectedRec"/>
+            <TextBlock Text="из" VerticalAlignment="Center"/>
+            <TextBlock Name="TB_allRec"/>
+        </StackPanel>
         <ListView Grid.Row="1" Name="LV_Clients" d:ItemsSource="{d:SampleData ItemCount=5}" >
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -77,5 +82,18 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <StackPanel Grid.Row="3" Orientation="Horizontal">
+            <ComboBox Name="CB_PageLen" Width="80" Margin="5">
+                <ComboBoxItem IsSelected="True">Все</ComboBoxItem>
+                <ComboBoxItem>10</ComboBoxItem>
+                <ComboBoxItem>50</ComboBoxItem>
+                <ComboBoxItem>200</ComboBoxItem>
+            </ComboBox>
+
+        </StackPanel>
+        <StackPanel  Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" >
+            <Button Name="Btn_left_page" Click="Btn_left_page_Click" Width="30" Height="30" Content="&lt;"/>
+            <Button Name="Btn_right_page" Click="Btn_right_page_Click" Width="30" Height="30" Content=">" Margin="10 0 10 0"/>
+        </StackPanel>
     </Grid>
 </Page>

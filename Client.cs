@@ -44,11 +44,14 @@ namespace ZelentsovLanguage
             }
         }
 
-        public DateTime LastArrival
+        public DateTime? LastArrival
         {
             get
             {
-                return ClientService.ToList().OrderBy(p => p.StartTime).First().StartTime;
+                if (ClientService.Count != 0)
+                    return ClientService.ToList().OrderBy(p => p.StartTime).First().StartTime;
+                else
+                    return null;
             }
         }
         public string Email { get; set; }
