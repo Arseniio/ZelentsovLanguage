@@ -12,11 +12,27 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="10*"/>
-            <RowDefinition/>
+            <RowDefinition Height="24*"/>
+            <RowDefinition Height="179*"/>
+            <RowDefinition Height="22*"/>
         </Grid.RowDefinitions>
-
+        <StackPanel Orientation="Horizontal" >
+            <TextBox Margin="10 0 0 0" Width="140" Height="30" d:Text="Search sample" FontSize="14pt" Name="TB_Serarch" TextChanged="TB_Serarch_TextChanged"/>
+            <ComboBox Margin="10 0 0 0" Width="140" Height="30" FontSize="14pt" Name="CB_Filter" SelectionChanged="CB_Filter_SelectionChanged" >
+                <ComboBoxItem IsSelected="True" Content="Все"/>
+                <ComboBoxItem Tag="Male" Content="Мужчины"/>
+                <ComboBoxItem Tag="Female" Content="Женщины"/>
+            </ComboBox>
+            <ComboBox Margin="10 0 0 0" Width="216" Height="30" FontSize="14pt" Name="CB_Search" SelectionChanged="CB_Search_SelectionChanged" >
+                <ComboBoxItem IsSelected="True" Content="Всё"/>
+                <ComboBoxItem Tag="LastNameDesc" Content="Фамилии от А до Я"/>
+                <ComboBoxItem Tag="LastNameAsce" Content="Фамилии от Я до А"/>
+                <ComboBoxItem Tag="LastArrivalNew" Content="Дата посещения от новых"/>
+                <ComboBoxItem Tag="LastArrivalOld" Content="Дата посещения от старых"/>
+                <ComboBoxItem Tag="ArrivalCountDesc" Content="Кол-во посещений по убыванию"/>
+                <ComboBoxItem Tag="ArrivalCountAsce" Content="Кол-во посещений по возрастанию"/>
+            </ComboBox>
+        </StackPanel>
         <ListView Grid.Row="1" Name="LV_Clients" d:ItemsSource="{d:SampleData ItemCount=5}" >
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -60,11 +76,11 @@
                         </StackPanel>
                         <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal">
                             <TextBlock Text="Дата последнего посещения: "/>
-                        <TextBlock Text="{Binding LastArrival}"/>
+                            <TextBlock Text="{Binding LastArrival,TargetNullValue='Нет посещений'}"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal">
                             <TextBlock Text="Количество посещений: "/>
-                            <TextBlock Text="{Binding ArrivalCount}"/>
+                            <TextBlock Text="{Binding ArrivalCount, TargetNullValue='Нет посещений'}"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1" Grid.Row="4" Orientation="Horizontal">
                             <TextBlock Text="{Binding GenderName}"/>
@@ -86,7 +102,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <StackPanel Grid.Row="3" Orientation="Horizontal">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" >
             <ComboBox Name="CB_PageLen" Width="80" Margin="5" SelectionChanged="CB_PageLen_SelectionChanged">
                 <ComboBoxItem IsSelected="True">Все</ComboBoxItem>
                 <ComboBoxItem>10</ComboBoxItem>
@@ -95,21 +111,23 @@
             </ComboBox>
 
         </StackPanel>
-        <StackPanel  Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" >
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Width="122" >
             <StackPanel Margin="0 0 30 0" Grid.Row="0" Orientation="Horizontal">
                 <TextBlock Name="TB_selectedRec" VerticalAlignment="Center"/>
                 <TextBlock Text="из" VerticalAlignment="Center" />
                 <TextBlock Name="TB_allRec" VerticalAlignment="Center"/>
             </StackPanel>
-            <Button Name="Btn_left_page" Click="Btn_left_page_Click" Width="30" Height="30" Content="&lt;"/>
-            <ListBox Name="LB_pages">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-            </ListBox>
-                <Button Name="Btn_right_page" Click="Btn_right_page_Click" Width="30" Height="30" Content=">" Margin="10 0 10 0"/>
+            <StackPanel Orientation="Horizontal">
+                <Button Name="Btn_left_page" Click="Btn_left_page_Click" Width="30" Height="30" Content="&lt;"/>
+                <ListBox Name="LB_pages">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
+                <Button Name="Btn_right_page" Click="Btn_right_page_Click" Width="30" Height="30" Content=">" Margin="10 0 0 0"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Page>

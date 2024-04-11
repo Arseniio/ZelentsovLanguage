@@ -32,6 +32,43 @@ namespace ZelentsovLanguage
         {
             var allClients = ZelentsovLanguageEntities.GetContext().Client.ToList();
             //Filters and search
+            allClients = allClients.FindAll(p =>
+            p.Email.ToLower().Contains(TB_Serarch.Text.ToLower()) ||
+            p.Phone.Replace("+", "").Replace("(", "").Replace(")", "").Contains(TB_Serarch.Text.Replace("+", "").Replace("(", "").Replace(")", "")) ||
+            p.FirstName.ToLower().Contains(TB_Serarch.Text.ToLower()) ||
+            p.LastName.ToLower().Contains(TB_Serarch.Text.ToLower()) ||
+            p.Patronymic.ToLower().Contains(TB_Serarch.Text.ToLower()));
+            switch ((CB_Filter.SelectedItem as ComboBoxItem).Tag)
+            {
+                case "Male":
+                    allClients = allClients.FindAll(p => p.GenderName == "м");
+                    break;
+                case "Female":
+                    allClients = allClients.FindAll(p => p.GenderName == "ж");
+                    break;
+            }
+
+            switch ((CB_Search.SelectedItem as ComboBoxItem).Tag)
+            {
+                case "LastNameDesc":
+                    allClients = allClients.OrderBy(p => p.LastName).ToList();
+                    break;
+                case "LastNameAsce":
+                    allClients = allClients.OrderByDescending(p => p.LastName).ToList();
+                    break;
+                case "LastArrivalNew":
+                    allClients = allClients.OrderByDescending(p => p.LastArrivalDate).ToList();
+                    break;
+                case "LastArrivalOld":
+                    allClients = allClients.OrderBy(p => p.LastArrivalDate).ToList();
+                    break;
+                case "ArrivalCountDesc":
+                    allClients = allClients.OrderBy(p => p.ArrivalCount).ToList();
+                    break;
+                case "ArrivalCountAsce":
+                    allClients = allClients.OrderByDescending(p => p.ArrivalCount).ToList();
+                    break;
+            }
             switch (CB_PageLen.SelectedIndex)
             {
                 case 0:
@@ -59,14 +96,14 @@ namespace ZelentsovLanguage
             if (pageLength != -1)
             {
                 var cutLength = 0;
-                if(((page+1) * pageLength) > allClients.Count)
+                if (((page + 1) * pageLength) > allClients.Count)
                 {
                     cutLength = allClients.Count - (page * pageLength);
-                    LV_Clients.ItemsSource = allClients.GetRange(page * pageLength, cutLength);
+                    if(cutLength > 0) LV_Clients.ItemsSource = allClients.GetRange(page * pageLength, cutLength);
 
                 }
                 else
-                LV_Clients.ItemsSource = allClients.GetRange(page * pageLength, pageLength);
+                    LV_Clients.ItemsSource = allClients.GetRange(page * pageLength, pageLength);
             }
             else if (pageLength == -1)
                 LV_Clients.ItemsSource = allClients;
@@ -92,7 +129,7 @@ namespace ZelentsovLanguage
         private void Btn_RemoveClient_Click(object sender, RoutedEventArgs e)
         {
             var client = (sender as Button).DataContext as Client;
-            if(client.ClientService.Count > 0)
+            if (client.ClientService.Count > 0)
             {
                 MessageBox.Show("Невозможно удалить клинета у которого были посещения");
                 return;
@@ -111,8 +148,30 @@ namespace ZelentsovLanguage
 
         private void CB_PageLen_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(this.IsLoaded)
+            if (this.IsLoaded)
+                UpdateClients();
+        }
+
+        private void TB_Serarch_TextChanged(object sender, TextChangedEventArgs e)
+        {
             UpdateClients();
+        }
+
+        private void CB_Filter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (this.IsLoaded)
+            {
+                UpdateClients();
+            }
+        }
+
+        private void CB_Search_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (this.IsLoaded)
+            {
+                UpdateClients();
+            }
+
         }
     }
 }

@@ -54,6 +54,16 @@ namespace ZelentsovLanguage
                     return null;
             }
         }
+        public DateTime? LastArrivalDate
+        {
+            get
+            {
+                if (ClientService.Count != 0)
+                    return ClientService.ToList().OrderByDescending(p => p.StartTime).First().StartTime;
+                else
+                    return null;
+            }
+        }
         public string Email { get; set; }
         public string Phone { get; set; }
         public string PhotoPath { get; set; }
